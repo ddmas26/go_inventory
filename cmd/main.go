@@ -50,6 +50,7 @@ func main() {
 	}
 
 	createdInventory, err := inventory_repo.Create(&newInventory, db)
+
 	if err != nil {
 		panic(err)
 	}

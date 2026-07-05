@@ -103,5 +103,6 @@ func (r *GenericRepo[T]) Create(entity *T, db *sql.DB) (T, error) {
 	if err != nil {
 		return *entity, err
 	}
+
 	return *entity, nil
 }
