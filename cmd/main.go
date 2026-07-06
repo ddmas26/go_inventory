@@ -1,21 +1,9 @@
 package main
 
 import (
-	"context"
 	"fmt"
-
 	"go_inventory/database"
 )
-
-func testconnection() {
-	repo, err := database.Connect2()
-	if err != nil {
-		panic(err)
-	}
-	database.QueryData(repo)
-
-	repo.Close(context.Background())
-}
 
 func main() {
 	db, err := database.Connect()
@@ -55,9 +43,17 @@ func main() {
 	// fmt.Println("user: ", createdUser)
 	// fmt.Println("inventory: ", createdInventory)
 
-	inventoryList, err := inventory_repo.FindAll(db)
-	if err != nil {
-		panic(err)
+	// inventoryList, err := inventory_repo.FindAll(db)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// fmt.Println(inventoryList)
+
+	req := database.PaginationRequest{
+		Filter:      "name: Widget, price: < 5 | price: > 100",
+		SearchBy:    []string{"name"},
+		SearchValue: "inventory",
 	}
-	fmt.Println(inventoryList)
+	inventoryList2, err := inventory_repo.FindAllPaginated(req, db)
+	fmt.Println(inventoryList2)
 }

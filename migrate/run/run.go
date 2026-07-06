@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -19,18 +20,18 @@ func check(e error) {
 
 func checkWithRollBack(err error, folder os.DirEntry) {
 	if err != nil {
-		fmt.Println("Error:", err)
-		fmt.Println("Rolling back migration...")
+		log.Println("Error:", err)
+		log.Println("Rolling back migration...")
 		downfilePath := "./migrate/migrations/" + folder.Name() + "/" + "down.sql"
 		downQuery, readErr := os.ReadFile(downfilePath)
 		if readErr != nil {
-			fmt.Println("Error reading down.sql:", readErr)
+			log.Println("Error reading down.sql:", readErr)
 			os.Exit(1)
 		}
 
 		_, execErr := DB.Exec(string(downQuery))
 		if execErr != nil {
-			fmt.Println("Error executing down.sql:", execErr)
+			log.Println("Error executing down.sql:", execErr)
 			os.Exit(1)
 		}
 		fmt.Printf("Rollback successful in folder: %s", folder.Name())
@@ -48,13 +49,13 @@ func checkFiles(folder os.DirEntry) {
 	filePath := "./migrate/migrations/" + folder.Name() + "/" + upfile.Name()
 	query, err := os.ReadFile(filePath)
 	check(err)
-	fmt.Println("Executing query:")
-	fmt.Println(string(query))
+	log.Println("Executing query:")
+	log.Println(string(query))
 	_, err = DB.Exec(string(query))
 	if err != nil {
 		checkWithRollBack(err, folder)
 	}
-	fmt.Printf("------> Executed up.sql successfully in folder: %s\n", folder.Name())
+	log.Printf("------> Executed up.sql successfully in folder: %s\n", folder.Name())
 
 }
 
@@ -82,24 +83,24 @@ func main() {
 		USER, PASSWORD, HOST, PORT, DBNAME,
 	)
 
-	// fmt.Println("Connection string:", connString)
+	log.Println("---> Connection string:", connString)
 	var err error
 
 	DB, err = sql.Open("postgres", connString)
 
 	if err != nil {
-		fmt.Println("Error connecting to the database:", err)
+		log.Println("---> Error connecting to the database:", err)
 		return
 	}
 	defer DB.Close()
 
 	err = DB.Ping()
 	if err != nil {
-		fmt.Println("Error pinging database:", err)
+		log.Println("---> Error pinging database:", err)
 		return
 	}
 
-	fmt.Println("Connection succeeded")
+	log.Println("---> Connection succeeded")
 
 	checkfolders()
 }
