@@ -40,6 +40,9 @@ func checkWithRollBack(err error, folder os.DirEntry) {
 
 func checkFiles(folder os.DirEntry) {
 	files, err := os.ReadDir("./migrate/migrations/" + folder.Name())
+	if len(files) == 0 {
+		return
+	}
 	check(err)
 	upfile := files[1]
 	filePath := "./migrate/migrations/" + folder.Name() + "/" + upfile.Name()
@@ -79,7 +82,7 @@ func main() {
 		USER, PASSWORD, HOST, PORT, DBNAME,
 	)
 
-	fmt.Println("Connection string:", connString)
+	// fmt.Println("Connection string:", connString)
 	var err error
 
 	DB, err = sql.Open("postgres", connString)
