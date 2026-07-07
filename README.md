@@ -1,4 +1,4 @@
-# Go Inventory
+# go-dbrepo
 
 A generic, type-safe CRUD and paginated query library for PostgreSQL, built with Go generics and reflection.
 
@@ -82,7 +82,7 @@ DBNAME=inventory_db
 ```bash
 # 1. Clone the repository
 git clone <repo-url>
-cd go_inventory
+cd go-dbrepo
 
 # 2. Start PostgreSQL (Docker)
 docker run -d \

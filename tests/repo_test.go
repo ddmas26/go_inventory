@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"go_inventory/database"
+	"go-dbrepo/database"
 
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"

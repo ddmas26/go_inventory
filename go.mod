@@ -1,4 +1,4 @@
-module go_inventory
+module go-dbrepo
 
 go 1.26.4
 
